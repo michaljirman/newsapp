@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="/shared/bsp/xsl/rss/nolsol.xsl"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+    <channel>
+        <title><![CDATA[BBC News - UK]]></title>
+        <description><![CDATA[BBC News - UK]]></description>
+        <link>https://www.bbc.co.uk/news/</link>
+        <image>
+            <url>https://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif</url>
+            <title>BBC News - UK</title>
+            <link>https://www.bbc.co.uk/news/</link>
+        </image>
+        <generator>RSS for Node</generator>
+        <lastBuildDate>Thu, 26 Dec 2019 11:54:04 GMT</lastBuildDate>
+        <copyright><![CDATA[Copyright: (C) British Broadcasting Corporation, see http://news.bbc.co.uk/2/hi/help/rss/4498287.stm for terms and conditions of reuse.]]></copyright>
+        <language><![CDATA[en-gb]]></language>
+        <ttl>15</ttl>
+        <item>
+            <title><![CDATA[Costa del Sol: Man and children drowned 'in tragic accident']]></title>
+            <description><![CDATA[Three members of the same family were found in a Costa del Sol swimming pool on Christmas Eve.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-50912652</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-50912652</guid>
+            <pubDate>Thu, 26 Dec 2019 08:53:25 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Gavin and Stacey top Christmas Day TV ratings]]></title>
+            <description><![CDATA[The much-anticipated reunion show is a festive smash hit, the most-watched Christmas show in 11 years.]]></description>
+            <link>https://www.bbc.co.uk/news/entertainment-arts-50915905</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/entertainment-arts-50915905</guid>
+            <pubDate>Thu, 26 Dec 2019 11:15:59 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[British troops move black rhinos to Malawi]]></title>
+            <description><![CDATA[The animals were moved from a South Africa park in the hope they would be protected from poachers.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-50913693</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-50913693</guid>
+            <pubDate>Thu, 26 Dec 2019 01:01:08 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Demand for BBC Action Line advice doubles in 2019]]></title>
+            <description><![CDATA[There was a rise in the number of people seeking advice about sexual abuse and mental health after BBC shows.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-50913837</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-50913837</guid>
+            <pubDate>Thu, 26 Dec 2019 04:48:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Rowan Williams: Climate change 'largest challenge ever']]></title>
+            <description><![CDATA[Dr Rowan Williams says some people don't believe in the climate crisis as it is hard to face up to.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-50915904</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-50915904</guid>
+            <pubDate>Thu, 26 Dec 2019 10:19:54 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Tortoise rescued after setting Great Dunmow house on fire]]></title>
+            <description><![CDATA[The "angry-looking" reptile was home alone when it knocked over a heat lamp, starting a fire.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-essex-50915895</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-essex-50915895</guid>
+            <pubDate>Thu, 26 Dec 2019 09:55:06 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Jelly Green uses art sales to protect Brazilian rainforest]]></title>
+            <description><![CDATA[Jelly Green, 27, says she wanted to act after seeing the "deeply alarming" effects of deforestation.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-suffolk-49729011</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-suffolk-49729011</guid>
+            <pubDate>Thu, 26 Dec 2019 08:36:57 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Second man charged over fatal stabbings in Barnet and Elstree]]></title>
+            <description><![CDATA[The two male victims were found within five miles of each other on 19 and 20 December.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-london-50916465</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-london-50916465</guid>
+            <pubDate>Thu, 26 Dec 2019 10:52:44 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Cliff-fall dog, Shadow, recovered after Eype beach ordeal]]></title>
+            <description><![CDATA[Shadow was found emaciated and with a broken leg after spending weeks trapped on a Dorset beach.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-dorset-50820725</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-dorset-50820725</guid>
+            <pubDate>Thu, 26 Dec 2019 10:36:17 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Channel migrants: Coastguard lead search and rescue operation]]></title>
+            <description><![CDATA[Two aircraft and Border Force vessels are scrambled to a "number of incidents," the coastguard says.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-kent-50916544</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-kent-50916544</guid>
+            <pubDate>Thu, 26 Dec 2019 11:05:58 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Travel: Family to sell their home to live on the road in Europe]]></title>
+            <description><![CDATA[Jennifer, Ollie and their son Charlie are going to live in a van as they travel across Europe.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-wales-50856193</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-wales-50856193</guid>
+            <pubDate>Thu, 26 Dec 2019 10:35:11 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Books 2020: What you could be reading]]></title>
+            <description><![CDATA[Titles to look forward to - from David Mitchell and Hilary Mantel to new writers and celebrities.]]></description>
+            <link>https://www.bbc.co.uk/news/entertainment-arts-50463141</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/entertainment-arts-50463141</guid>
+            <pubDate>Thu, 26 Dec 2019 00:25:59 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[My Money: 'I'm exactly £1,000 lighter']]></title>
+            <description><![CDATA[As part of a new BBC blog series, Angela Jansen shares what she spent her money on this week.]]></description>
+            <link>https://www.bbc.co.uk/news/business-50732170</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/business-50732170</guid>
+            <pubDate>Thu, 26 Dec 2019 00:39:53 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Watkin's Wembley folly: London's 'Eiffel Tower' that never was]]></title>
+            <description><![CDATA[A Victorian rail magnate tried to build a taller tower than Eiffel's - but it did not go to plan.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-50628714</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-50628714</guid>
+            <pubDate>Thu, 26 Dec 2019 00:58:52 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Loneliness: How one shed is bringing people together]]></title>
+            <description><![CDATA[A retired teacher has transformed the building into a Men's Shed, helping to tackle loneliness.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-wales-50825762</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-wales-50825762</guid>
+            <pubDate>Thu, 26 Dec 2019 03:10:57 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Christmas Day with a difference across England]]></title>
+            <description><![CDATA[Spare a thought for those sea swimming, feeding the lonely and even giving birth on Christmas Day.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-50823553</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-50823553</guid>
+            <pubDate>Wed, 25 Dec 2019 12:04:01 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Why I spend my weekends ringing birds]]></title>
+            <description><![CDATA[More than a million birds are trapped every year in the British Isles by volunteers.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-50822772</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-50822772</guid>
+            <pubDate>Wed, 25 Dec 2019 00:42:58 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Call the Midwife: The real-life nurses who inspired Scottish adventure]]></title>
+            <description><![CDATA[The nuns swap Poplar for the Outer Hebrides in a Christmas special inspired by real "Hebridean Heroines".]]></description>
+            <link>https://www.bbc.co.uk/news/uk-scotland-50829943</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-scotland-50829943</guid>
+            <pubDate>Wed, 25 Dec 2019 00:43:14 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Communities in Calderdale 'traumatised' by 2015 floods]]></title>
+            <description><![CDATA[Hundreds of people affected by severe flooding four years ago have sought mental health support.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-leeds-50850195</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-leeds-50850195</guid>
+            <pubDate>Wed, 25 Dec 2019 00:43:39 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA['Why it's OK I'm not seeing my family this Christmas']]></title>
+            <description><![CDATA['All the adverts are families happy in a house together. That's not what a family is these days.']]></description>
+            <link>https://www.bbc.co.uk/news/newsbeat-50839644</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/newsbeat-50839644</guid>
+            <pubDate>Wed, 25 Dec 2019 00:44:17 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Christmas shopping online or in person - who wins?]]></title>
+            <description><![CDATA[Online shopping is on the rise, with more and more people choosing the sofa to buy goods, but which is better?]]></description>
+            <link>https://www.bbc.co.uk/news/business-50898576</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/business-50898576</guid>
+            <pubDate>Thu, 26 Dec 2019 00:10:01 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Morpurgo's Christmas (fire) cracker]]></title>
+            <description><![CDATA[A behind-the-scenes look at the making of the yuletide offering from children's author, Sir Michael Morpurgo.]]></description>
+            <link>https://www.bbc.co.uk/news/entertainment-arts-50686756</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/entertainment-arts-50686756</guid>
+            <pubDate>Thu, 26 Dec 2019 00:15:07 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Dog walker helps men talk about mental health]]></title>
+            <description><![CDATA[Rob Osman started the group Dudes And Dogs when he realised dog walking had pulled him out of depression.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-bristol-50872597</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-bristol-50872597</guid>
+            <pubDate>Thu, 26 Dec 2019 00:24:06 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[The Queen's Christmas message 2019: In full]]></title>
+            <description><![CDATA[The monarch says "small steps" and not giant leaps bring about the most lasting change.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-50912433</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-50912433</guid>
+            <pubDate>Wed, 25 Dec 2019 15:10:17 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Prince George and Princess Charlotte join Christmas Day church service]]></title>
+            <description><![CDATA[The Royal Family greet well-wishers after attending the Christmas Day church service at Sandringham.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-50912432</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-50912432</guid>
+            <pubDate>Wed, 25 Dec 2019 13:16:10 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[James Corden on Gavin and Stacey return]]></title>
+            <description><![CDATA[James Corden on being back in Barry Island and why he decided it was time for a Gavin and Stacey reunion.]]></description>
+            <link>https://www.bbc.co.uk/news/entertainment-arts-50885323</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/entertainment-arts-50885323</guid>
+            <pubDate>Wed, 25 Dec 2019 06:56:33 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[The Papers: Queen's 'two Christmases' and bridge hero awards]]></title>
+            <description><![CDATA[The Boxing Day papers cover the Royals' Christmas and possible honours for London Bridge survivors.]]></description>
+            <link>https://www.bbc.co.uk/news/blogs-the-papers-50913882</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/blogs-the-papers-50913882</guid>
+            <pubDate>Thu, 26 Dec 2019 05:40:51 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Murder investigation after Christmas Eve shooting]]></title>
+            <description><![CDATA[A man believed to be in his 30s was pronounced dead at the scene by emergency services.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-london-50913669</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-london-50913669</guid>
+            <pubDate>Wed, 25 Dec 2019 19:19:22 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Glencoe fire: Ski resort closed after base station 'almost completely' destroyed]]></title>
+            <description><![CDATA[Glencoe Mountain Resort says the base station restaurant was "almost completely" destroyed.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-scotland-highlands-islands-50916475</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-scotland-highlands-islands-50916475</guid>
+            <pubDate>Thu, 26 Dec 2019 10:11:02 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Kinnaird Close, Belfast: Man, 35, appears in court over double murder]]></title>
+            <description><![CDATA[Frances Murray and Joseph Dutton were found dead in a flat in Kinnaird Close on Monday.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-northern-ireland-50915805</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-northern-ireland-50915805</guid>
+            <pubDate>Thu, 26 Dec 2019 11:51:41 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Man killed in Christmas Day crash near Neath]]></title>
+            <description><![CDATA[Emergency services were called to a crash involving two cars and a pedestrian near Neath.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-wales-50915675</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-wales-50915675</guid>
+            <pubDate>Thu, 26 Dec 2019 08:19:36 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Sewage warning for Witney stream after heavy rainfall]]></title>
+            <description><![CDATA[Thames Water says some wastewater is allowed to overflow to prevent flooding to homes.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-england-oxfordshire-50916698</link>
+            <guid isPermaLink="true">https://www.bbc.co.uk/news/uk-england-oxfordshire-50916698</guid>
+            <pubDate>Thu, 26 Dec 2019 11:41:44 GMT</pubDate>
+        </item>
+    </channel>
+</rss>

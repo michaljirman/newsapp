@@ -1,0 +1,21 @@
+### Create a new news feed
+POST http://localhost:8081/newsfeeder/feeds HTTP/1.1
+content-type: application/json
+
+{
+    "category": "UK",
+    "provider": "BBC",
+    "url": "http://feeds.bbci.co.uk/news/uk/rss.xml"
+}
+
+### Get articles by feed ID
+GET /newsfeeder/feeds/1/articles HTTP/1.1
+Host: localhost:8081
+
+### Get articles by feed ID and category
+GET /news/1?category=UK%20News HTTP/1.1
+Host: localhost:8081
+
+### Get articles by feed ID and provider
+GET /news/1?provider=test HTTP/1.1
+Host: localhost:8081

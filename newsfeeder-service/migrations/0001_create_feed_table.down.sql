@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS feed;
+DROP SEQUENCE IF EXISTS feed_id_seq;
