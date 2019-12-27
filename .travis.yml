@@ -11,12 +11,8 @@ matrix:
   exclude:
     - go: 1.13.x
       env: GO111MODULE=off ## Modules are the default now.
-install:
-  - ./travis/install.sh
 script:
-  - ./travis/cross_build.sh
-  - ./travis/lint.sh
   - export GOMAXPROCS=4
   - export GORACE=halt_on_error=1
   - go test -race -v ./...
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go test -race -v -tags appengine ./... ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then go test -race -v -tags live ./... ; fi
