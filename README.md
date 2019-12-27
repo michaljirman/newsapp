@@ -4,8 +4,64 @@ This repository contains a demo News App (API) project consiting of two microser
 * apigateway-service
 * newsfeeder-service
 
+## `Design`
 
-## Setup
+
+### Some external libraries 
+
+* [go-kit](https://gokit.io/) 
+    
+    Projects is built on top of the [go-kit](https://gokit.io/) library which provides collection of Go (golang) packages (libraries) that help you build robust, reliable, maintainable microservices.  
+
+* [http-cache](github.com/victorspringer/http-cache) 
+
+    Provides in-memory caching at the transport layer.
+
+* [gofeed](github.com/mmcdole/gofeed)
+    
+    Provides a feed parser that supports parsing both RSS and Atom feeds.
+
+* [errors](github.com/pkg/errors)
+
+    Provides a simple error handling primitive with support for call stack in error.
+
+* [logrus](github.com/sirupsen/logrus)
+
+    Provides a structured logger for Go (golang), completely API compatible with the standard library logger.
+
+* [Additional dependencies]()
+
+    ```
+        github.com/DATA-DOG/go-sqlmock
+        github.com/PuerkitoBio/goquery
+        github.com/afex/hystrix-go
+        github.com/caarlos0/env
+        github.com/go-kit/kit
+        github.com/golang-migrate/migrate/v4
+        github.com/golang/mock
+        github.com/golang/protobuf
+        github.com/gorilla/mux
+        github.com/jmoiron/sqlx
+        github.com/joho/godotenv
+        github.com/lib/pq
+        github.com/mmcdole/gofeed
+        github.com/pkg/errors
+        github.com/sirupsen/logrus
+        github.com/smartystreets/goconvey
+        github.com/sony/gobreaker
+        github.com/stretchr/testify
+        github.com/victorspringer/http-cache
+        google.golang.org/grpc v1.26.0
+    ```
+
+    ### 3rd party APIs
+
+    * [urlbox.io](https://urlbox.io/docs)
+
+        A screenshot service allowing to request a web page screeshot via API. 
+
+
+## `Setup`
 Clone this repository and navigate to the folder 
 ```
 https://github.com/michaljirman/newsapp
@@ -27,9 +83,9 @@ docker-compose exposes services on ports
 
 Please make sure these port are not taken or change the values in the `docker-compose.yml`
 
-## API endpoints
+## `API endpoints`
 
-## `/newsfeeder/feeds`
+### `/newsfeeder/feeds`
 Retrieve list of available feeds
 ```
 curl --request GET --url http://localhost:8801/newsfeeder/feeds
@@ -74,7 +130,7 @@ curl --request GET --url http://localhost:8801/newsfeeder/feeds
 }
 ```
 
-## `/newsfeeder/feeds`
+### `/newsfeeder/feeds`
 Create a new feed
 ```
 curl --request POST --url http://localhost:8801/newsfeeder/feeds --header 'content-type: application/json' --data '{"category": "politics","provider": "BBC","url": "http://feeds.bbci.co.uk/news/politics/rss.xml"}'
@@ -93,7 +149,7 @@ Connection: close
 }
 ```
 
-## `/newsfeeder/feeds?category=UK`
+### `/newsfeeder/feeds?category=UK`
 Retrieve list of available feeds filtered by category
 ```
 curl --request GET --url 'http://localhost:8801/newsfeeder/feeds?category=UK'
@@ -130,7 +186,7 @@ Connection: close
 
 
 
-## `/newsfeeder/feeds?provider=Reuters`
+### `/newsfeeder/feeds?provider=Reuters`
 Retrieve list of available feeds filtered by category
 ```
 curl --request GET --url 'http://localhost:8801/newsfeeder/feeds?provider=Reuters'
@@ -165,7 +221,7 @@ Connection: close
 }
 ```
 
-## `/newsfeeder/feeds?category=UK&provider=Reuters`
+### `/newsfeeder/feeds?category=UK&provider=Reuters`
 Retrieve list of available feeds filtered by category and provider
 ```
 curl --request GET --url 'http://localhost:8801/newsfeeder/feeds?category=UK&provider=Reuters'
@@ -192,7 +248,7 @@ Connection: close
 }
 ```
 
-## `/newsfeeder/feeds/1/articles`
+### `/newsfeeder/feeds/1/articles`
 Retrieve list of articles for the feed ID
 ```
 curl --request GET --url http://localhost:8801/newsfeeder/feeds/1/articles
@@ -228,7 +284,7 @@ Transfer-Encoding: chunked
 }
 ```
 
-## `/newsfeeder/feeds/1/articles`
+### `/newsfeeder/feeds/1/articles`
 Retrieve a single article for the feed ID by article GUID
 ```
 curl --request POST --url http://localhost:8801/newsfeeder/articles/searches --data '{"feed_id": 1,"article_guid": "https://www.bbc.co.uk/news/uk-england-50823553"}'
@@ -257,4 +313,4 @@ Transfer-Encoding: chunked
 
 ```
 
-## Additonal Notes
+### Additonal Notes
