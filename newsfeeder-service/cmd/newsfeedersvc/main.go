@@ -8,7 +8,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	kitgrpc "github.com/go-kit/kit/transport/grpc"
 	"github.com/mmcdole/gofeed"
 	"github.com/oklog/oklog/pkg/group"
 	"github.com/sirupsen/logrus"
@@ -83,9 +82,7 @@ func main() {
 		}
 		g.Add(func() error {
 			logger.Debugf("transport=%s addr=%s", "gRPC", cfg.GRPCAddr)
-			// we add the Go Kit gRPC Interceptor to our gRPC service as it is used by
-			// the here demonstrated zipkin tracing middleware.
-			baseServer := grpc.NewServer(grpc.UnaryInterceptor(kitgrpc.Interceptor))
+			baseServer := grpc.NewServer()
 			feederPb.RegisterFeederServer(baseServer, gRPCServer)
 			return baseServer.Serve(gRPCListener)
 		}, func(error) {

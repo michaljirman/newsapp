@@ -36,7 +36,7 @@ func setup(t *testing.T) (*configs.Config, *logrus.Logger, context.Context) {
 
 func prepareTestFeeds() ([]models.Feed, *sqlmock.Rows) {
 	timeNow := time.Now()
-	expectedRows := sqlmock.NewRows([]string{"feed_id", "created_at", "updated_at", "category", "provider", "url"}).
+	expectedRows := sqlmock.NewRows([]string{"feed_id", "created_at", "modified_at", "category", "provider", "url"}).
 		AddRow(1, timeNow, timeNow, "UK", "BBC", "http://feeds.bbci.co.uk/news/uk/rss.xml").
 		AddRow(2, timeNow, timeNow, "Technology", "BBC", "http://feeds.bbci.co.uk/news/technology/rss.xml").
 		AddRow(3, timeNow, timeNow, "UK", "Reuters", "http://feeds.reuters.com/reuters/UKdomesticNews?format=xml").

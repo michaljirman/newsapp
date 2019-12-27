@@ -9,7 +9,7 @@ RUN mkdir -p /go/src/github.com/michaljirman/newsapp/apigateway-service
 COPY apigateway-service /go/src/github.com/michaljirman/newsapp/apigateway-service
 WORKDIR /go/src/github.com/michaljirman/newsapp/apigateway-service
 
-# RUN go test -v -race -tags live ./...
+RUN go test -v -race -tags live ./...
 RUN CGO_ENABLED=0 go install -a /go/src/github.com/michaljirman/newsapp/apigateway-service/cmd/apigatewaysvc
 
 FROM alpine:3.8

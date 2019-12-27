@@ -154,7 +154,7 @@ func TestGetArticles(t *testing.T) {
 		feedSvc := NewFeedService(logger, cfg, mockFeedRepo, feedParser)
 
 		feedID := uint64(1)
-		mockFeedRepo.EXPECT().GetFeedByID(ctx, gomock.Eq(feedID)).Return(&expectedFeed, error(nil))
+		mockFeedRepo.EXPECT().GetFeedByID(ctx, gomock.Eq(feedID)).Return(expectedFeed, error(nil))
 		articles, err := feedSvc.GetArticles(ctx, feedID)
 		if err != nil {
 			t.Fatal("failed to get articles")
