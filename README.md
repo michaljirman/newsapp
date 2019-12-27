@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/michaljirman/newsapp.svg?branch=master)](https://travis-ci.org/michaljirman/newsapp)
+
 # Overview
 This repository contains a demo News App (API) project consiting of two microservices: 
 
