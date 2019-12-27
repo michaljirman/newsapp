@@ -19,6 +19,7 @@ import (
 	"github.com/michaljirman/newsapp/newsfeeder-service/pkg/repositories"
 )
 
+// FeedService describes a service that manages feeds and articles.
 type FeedService interface {
 	CreateFeed(ctx context.Context, category, provider, url string) (uint64, error)
 	GetFeeds(ctx context.Context, category, provider string) ([]models.Feed, error)
@@ -26,6 +27,7 @@ type FeedService interface {
 	GetArticle(ctx context.Context, feedID uint64, articleGUID string) (models.Article, error)
 }
 
+// NewFeedService returns a basic FeedService with all necessary dependencies such as feedParser, repository, logger and config.
 func NewFeedService(logger *logrus.Logger, cfg *configs.Config, repo repositories.FeedRepository, feedParser *gofeed.Parser) FeedService {
 	var svc FeedService
 	{
@@ -41,6 +43,7 @@ type basicFeedService struct {
 	feedParser *gofeed.Parser
 }
 
+// CreateFeed creates a new feed.
 func (s *basicFeedService) CreateFeed(ctx context.Context, category, provider, url string) (uint64, error) {
 	feed := models.Feed{Category: category, Provider: provider, URL: url}
 	feedID, err := s.repo.CreateFeed(ctx, feed)
@@ -50,6 +53,7 @@ func (s *basicFeedService) CreateFeed(ctx context.Context, category, provider, u
 	return feedID, nil
 }
 
+// GetFeeds retrieves feeds by category and provider.
 func (s *basicFeedService) GetFeeds(ctx context.Context, category, provider string) ([]models.Feed, error) {
 	feeds, err := s.repo.GetFeeds(ctx, category, provider)
 	if err != nil {
@@ -58,6 +62,7 @@ func (s *basicFeedService) GetFeeds(ctx context.Context, category, provider stri
 	return feeds, nil
 }
 
+// GetArticle retrieves a single article by feed identifier and article guid.
 func (s *basicFeedService) GetArticle(ctx context.Context, feedID uint64, articleGUID string) (models.Article, error) {
 	feedInfoDB, err := s.repo.GetFeedByID(ctx, feedID)
 	if err != nil {
@@ -98,6 +103,7 @@ func (s *basicFeedService) GetArticle(ctx context.Context, feedID uint64, articl
 	return models.Article{}, errors.Errorf("failed to fetch article %s", articleGUID)
 }
 
+// GetArticles retrieves all articles by feed ID.
 func (s *basicFeedService) GetArticles(ctx context.Context, feedID uint64) ([]models.Article, error) {
 	var newsArticles []models.Article
 	feedInfoDB, err := s.repo.GetFeedByID(ctx, feedID)

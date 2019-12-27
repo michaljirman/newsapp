@@ -12,21 +12,21 @@ import (
 	"github.com/michaljirman/newsapp/newsfeeder-service/pkg/models"
 )
 
-// FeedRepository describes the persistence methods on the Feed model
+// FeedRepository describes the persistence methods on the Feed model.
 type FeedRepository interface {
 	CreateFeed(ctx context.Context, feed models.Feed) (uint64, error)
 	GetFeeds(ctx context.Context, category, provider string) ([]models.Feed, error)
 	GetFeedByID(ctx context.Context, feedID uint64) (models.Feed, error)
 }
 
-// feedRepository implements FeedRepository interface to work on the Feed model
+// feedRepository implements FeedRepository interface to work on the Feed model.
 type feedRepository struct {
 	db     *sqlx.DB
 	Config *configs.DBConfig
 	logger *logrus.Logger
 }
 
-// NewFeedRepository creates a new instance of FeedRepository
+// NewFeedRepository creates a new instance of FeedRepository.
 func NewFeedRepository(cfg *configs.DBConfig, dbHandle *sql.DB, logger *logrus.Logger) (FeedRepository, error) {
 	db := sqlx.NewDb(dbHandle, "postgres")
 	repo := &feedRepository{
@@ -37,7 +37,7 @@ func NewFeedRepository(cfg *configs.DBConfig, dbHandle *sql.DB, logger *logrus.L
 	return repo, nil
 }
 
-// CreateFeed inserts a new feed to the database
+// CreateFeed inserts a new feed to the database and returns feed ID of newly created feed.
 func (repo *feedRepository) CreateFeed(ctx context.Context, feed models.Feed) (uint64, error) {
 	tx := repo.db.MustBegin()
 	var feedID uint64
@@ -49,7 +49,7 @@ func (repo *feedRepository) CreateFeed(ctx context.Context, feed models.Feed) (u
 	return feedID, nil
 }
 
-// GetFeeds retrieves all feeds from the database
+// GetFeeds retrieves all feeds from the database.
 // TODO use https://github.com/masterminds/squirrel for more complex filtering
 func (repo *feedRepository) GetFeeds(ctx context.Context, category, provider string) ([]models.Feed, error) {
 	feeds := []models.Feed{}
@@ -74,7 +74,7 @@ func (repo *feedRepository) GetFeeds(ctx context.Context, category, provider str
 	return feeds, nil
 }
 
-// GetFeedByID retrieves a single feed by
+// GetFeedByID retrieves a single feed from database by feed ID.
 func (repo *feedRepository) GetFeedByID(ctx context.Context, feedID uint64) (models.Feed, error) {
 	feed := models.Feed{}
 	err := repo.db.Get(&feed, "SELECT * FROM feed where feed_id = $1", feedID)

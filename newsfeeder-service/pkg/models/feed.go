@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Feed models a news feed.
 type Feed struct {
 	ID       uint64    `json:"feed_id" db:"feed_id"`
 	Created  time.Time `json:"created_at" db:"created_at"`
@@ -14,6 +15,7 @@ type Feed struct {
 	URL      string    `json:"url" db:"url"`
 }
 
+// Article models a news feed's article.
 type Article struct {
 	Title             string    `json:"title"`
 	Description       string    `json:"description"`
@@ -24,6 +26,7 @@ type Article struct {
 	HTMLContent       string    `json:"html_content,omitempty"`
 }
 
+// String returns string representation of an Article model.
 func (a Article) String() string {
 	return fmt.Sprintf(`
 	Article

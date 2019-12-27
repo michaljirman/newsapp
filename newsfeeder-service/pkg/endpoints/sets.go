@@ -17,14 +17,19 @@ import (
 	"github.com/michaljirman/newsapp/newsfeeder-service/pkg/services"
 )
 
-type Endpoints struct {
+// Sets collects all of the endpoints that compose an feed service. It's meant to
+// be used as a helper struct, to collect all of the endpoints into a single
+// parameter.
+type Sets struct {
 	CreateFeedEndpoint  endpoint.Endpoint
 	GetFeedsEndpoint    endpoint.Endpoint
 	GetArticlesEndpoint endpoint.Endpoint
 	GetArticleEndpoint  endpoint.Endpoint
 }
 
-func CreateEndpoints(svc services.FeedService, logger *logrus.Logger) Endpoints {
+// CreateEndpoints returns a Set that wraps the provided server, and wires in all of the
+// expected endpoint middlewares via the various parameters.
+func CreateEndpoints(svc services.FeedService, logger *logrus.Logger) Sets {
 	var createFeedEndpoint endpoint.Endpoint
 	{
 		createFeedEndpoint = MakeCreateFeedEndpoint(svc)
@@ -53,7 +58,7 @@ func CreateEndpoints(svc services.FeedService, logger *logrus.Logger) Endpoints 
 		getArticleEndpoint = circuitbreaker.Gobreaker(gobreaker.NewCircuitBreaker(gobreaker.Settings{}))(getArticleEndpoint)
 	}
 
-	return Endpoints{
+	return Sets{
 		CreateFeedEndpoint:  createFeedEndpoint,
 		GetFeedsEndpoint:    getFeedsEndpoint,
 		GetArticlesEndpoint: getArticlesEndpoint,
@@ -61,6 +66,7 @@ func CreateEndpoints(svc services.FeedService, logger *logrus.Logger) Endpoints 
 	}
 }
 
+// MakeCreateFeedEndpoint constructs a CreateFeed endpoint wrapping the service.
 func MakeCreateFeedEndpoint(svc services.FeedService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(CreateFeedRequest)
@@ -69,6 +75,7 @@ func MakeCreateFeedEndpoint(svc services.FeedService) endpoint.Endpoint {
 	}
 }
 
+// MakeGetFeedsEndpoint constructs a GetFeeds endpoint wrapping the service.
 func MakeGetFeedsEndpoint(svc services.FeedService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(GetFeedsRequest)
@@ -77,6 +84,7 @@ func MakeGetFeedsEndpoint(svc services.FeedService) endpoint.Endpoint {
 	}
 }
 
+// MakeGetArticlesEndpoint constructs a GetArticles endpoint wrapping the service.
 func MakeGetArticlesEndpoint(svc services.FeedService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(GetArticlesRequest)
@@ -85,6 +93,7 @@ func MakeGetArticlesEndpoint(svc services.FeedService) endpoint.Endpoint {
 	}
 }
 
+// MakeGetArticleEndpoint constructs a GetArticle endpoint wrapping the service.
 func MakeGetArticleEndpoint(svc services.FeedService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(GetArticleRequest)
@@ -93,6 +102,7 @@ func MakeGetArticleEndpoint(svc services.FeedService) endpoint.Endpoint {
 	}
 }
 
+// CreateFeedRequest collects the request parameters for the CreateFeed method.
 type CreateFeedRequest struct {
 	Category   string `json:"category"`
 	Provider   string `json:"provider"`
@@ -100,45 +110,56 @@ type CreateFeedRequest struct {
 	RequestURI string
 }
 
+// CreateFeedResponse collects the response parameters for the CreateFeed method.
 type CreateFeedResponse struct {
 	FeedID      uint64
 	ResourceURI string `json:"-"`
 	Err         error  `json:"err,omitempty"`
 }
 
+// Failed implements endpoint.Failer.
 func (resp CreateFeedResponse) Failed() error { return resp.Err }
 
+// GetArticlesRequest collects the request parameters for the GetArticles method.
 type GetArticlesRequest struct {
 	FeedID uint64
 }
 
+// GetArticlesResponse collects the response parameters for the GetArticles method.
 type GetArticlesResponse struct {
 	Articles []models.Article `json:"articles"`
 	Err      error            `json:"err,omitempty"`
 }
 
+// Failed implements endpoint.Failer.
 func (r GetArticlesResponse) Failed() error { return r.Err }
 
+// GetFeedsRequest collects the request parameters for the GetFeeds method.
 type GetFeedsRequest struct {
 	Category string `json:"category"`
 	Provider string `json:"provider"`
 }
 
+// GetFeedsResponse collects the response parameters for the GetFeeds method.
 type GetFeedsResponse struct {
 	Feeds []models.Feed `json:"feeds"`
 	Err   error         `json:"err,omitempty"`
 }
 
+// Failed implements endpoint.Failer.
 func (r GetFeedsResponse) Failed() error { return r.Err }
 
+// GetArticleRequest collects the request parameters for the GetArticle method.
 type GetArticleRequest struct {
 	FeedID      uint64 `json:"feed_id"`
 	ArticleGUID string `json:"article_guid"`
 }
 
+// GetArticleResponse collects the response parameters for the GetArticle method.
 type GetArticleResponse struct {
 	Article models.Article `json:"article"`
 	Err     error          `json:"err,omitempty"`
 }
 
+// Failed implements endpoint.Failer.
 func (r GetArticleResponse) Failed() error { return r.Err }

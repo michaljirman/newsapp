@@ -29,7 +29,7 @@ type gRPCServer struct {
 }
 
 // NewGRPCServer creates a new instance of GRPC server
-func NewGRPCServer(endpoints endpoints.Endpoints, logger *logrus.Logger) pb.FeederServer {
+func NewGRPCServer(endpoints endpoints.Sets, logger *logrus.Logger) pb.FeederServer {
 	options := []kitGRPCTransport.ServerOption{
 		kitGRPCTransport.ServerErrorLogger(kitLog.NewLogrusLogger(logger)),
 	}
@@ -218,7 +218,7 @@ func err2str(err error) string {
 	return err.Error()
 }
 
-func NewGRPCClient(conn *grpc.ClientConn, logger *logrus.Logger) endpoints.Endpoints {
+func NewGRPCClient(conn *grpc.ClientConn, logger *logrus.Logger) endpoints.Sets {
 	limiter := ratelimit.NewErroringLimiter(rate.NewLimiter(rate.Every(time.Second), 100))
 
 	var options []kitGRPCTransport.ClientOption
@@ -295,7 +295,7 @@ func NewGRPCClient(conn *grpc.ClientConn, logger *logrus.Logger) endpoints.Endpo
 		}))(createFeedEndpoint)
 	}
 
-	return endpoints.Endpoints{
+	return endpoints.Sets{
 		CreateFeedEndpoint:  createFeedEndpoint,
 		GetFeedsEndpoint:    getFeedsEndpoint,
 		GetArticlesEndpoint: getArticlesEndpoint,

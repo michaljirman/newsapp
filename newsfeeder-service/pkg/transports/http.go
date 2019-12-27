@@ -21,7 +21,7 @@ var (
 	ErrBadRouting = errors.New("inconsistent mapping between route and handler (programmer error)")
 )
 
-func NewHTTPHandler(endpoints endpoints.Endpoints, logger *logrus.Logger) http.Handler {
+func NewHTTPHandler(endpoints endpoints.Sets, logger *logrus.Logger) http.Handler {
 	options := []kitHttpTransport.ServerOption{
 		kitHttpTransport.ServerErrorEncoder(errorEncoder),
 		kitHttpTransport.ServerErrorLogger(kitLog.NewLogrusLogger(logger)),
