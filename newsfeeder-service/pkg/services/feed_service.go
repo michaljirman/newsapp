@@ -2,10 +2,11 @@ package services
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
-	"html"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"sort"
 	"sync"
 
@@ -22,6 +23,7 @@ type FeedService interface {
 	CreateFeed(ctx context.Context, category, provider, url string) (uint64, error)
 	GetFeeds(ctx context.Context, category, provider string) ([]models.Feed, error)
 	GetArticles(ctx context.Context, feedID uint64) ([]models.Article, error)
+	GetArticle(ctx context.Context, feedID uint64, articleGUID string) (models.Article, error)
 }
 
 func NewFeedService(logger *logrus.Logger, cfg *configs.Config, repo repositories.FeedRepository, feedParser *gofeed.Parser) FeedService {
@@ -56,6 +58,46 @@ func (s *basicFeedService) GetFeeds(ctx context.Context, category, provider stri
 	return feeds, nil
 }
 
+func (s *basicFeedService) GetArticle(ctx context.Context, feedID uint64, articleGUID string) (models.Article, error) {
+	feedInfoDB, err := s.repo.GetFeedByID(ctx, feedID)
+	if err != nil {
+		return models.Article{}, errors.Wrapf(err, "failed to retrieve feed by ID %d", feedID)
+	}
+
+	feed, err := s.feedParser.ParseURL(feedInfoDB.URL)
+	if err != nil {
+		s.logger.Error(errors.Wrap(err, "failed to parse feedID as url"))
+	}
+
+	for _, item := range feed.Items {
+		if item.GUID == articleGUID {
+			newsArticle := models.Article{
+				Title:       item.Title,
+				Description: item.Description,
+				Link:        item.Link,
+				GUID:        item.GUID,
+			}
+
+			if item.PublishedParsed != nil {
+				newsArticle.Published = *item.PublishedParsed
+			}
+
+			htmlContent, err := fetchHTMLlContent(item)
+			if err != nil {
+				s.logger.Warn("failed to fetch html content")
+			}
+			newsArticle.HTMLContent = base64.StdEncoding.EncodeToString(htmlContent)
+
+			thumbnailFeedImgURL := prepareThumbnailFeedImageURL(item, s.cfg.URLBox)
+			if len(thumbnailFeedImgURL) != 0 {
+				newsArticle.ThumbnailImageURL = thumbnailFeedImgURL
+			}
+			return newsArticle, nil
+		}
+	}
+	return models.Article{}, errors.Errorf("failed to fetch article %s", articleGUID)
+}
+
 func (s *basicFeedService) GetArticles(ctx context.Context, feedID uint64) ([]models.Article, error) {
 	var newsArticles []models.Article
 	feedInfoDB, err := s.repo.GetFeedByID(ctx, feedID)
@@ -86,12 +128,6 @@ func (s *basicFeedService) GetArticles(ctx context.Context, feedID uint64) ([]mo
 				newsArticle.Published = *item.PublishedParsed
 			}
 
-			// htmlContent, err := fetchHTMLlContent(item)
-			// if err != nil {
-			// 	s.logger.Warn("failed to fetch html content")
-			// }
-			// newsArticle.HTMLContent = htmlContent
-
 			thumbnailFeedImgURL := prepareThumbnailFeedImageURL(item, s.cfg.URLBox)
 			if len(thumbnailFeedImgURL) != 0 {
 				newsArticle.ThumbnailImageURL = thumbnailFeedImgURL
@@ -117,8 +153,7 @@ func prepareThumbnailFeedImageURL(item *gofeed.Item, cfg configs.URLBoxConfig) s
 	if item.Image != nil {
 		return item.Image.URL
 	}
-
-	return fmt.Sprintf("%s%s/png?url=%s&thumb_width=%d?ttl=%d", cfg.URL, cfg.Token, item.Link, 150, 86400)
+	return fmt.Sprintf("%s%s/png?url=%s&thumb_width=%d&ttl=%d", cfg.URL, cfg.Token, url.QueryEscape(item.Link), 150, 86400)
 }
 
 // fetchThumbnailImageData fetches image data from external provider
@@ -139,17 +174,17 @@ func fetchThumbnailImageData(item *gofeed.Item, url string) ([]byte, error) {
 }
 
 // fetchHTMLContent fetches escaped html string
-func fetchHTMLlContent(item *gofeed.Item) (string, error) {
+func fetchHTMLlContent(item *gofeed.Item) ([]byte, error) {
 	resp, err := http.Get(item.Link)
 	if err != nil {
-		return "", errors.WithStack(err)
+		return nil, errors.WithStack(err)
 	}
 	defer resp.Body.Close()
 	pageHTML, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return "", errors.WithStack(err)
+		return nil, errors.WithStack(err)
 	}
-	return html.EscapeString(string(pageHTML)), nil
+	return pageHTML, nil
 }
 
 func newBasicFeedService(logger *logrus.Logger, cfg *configs.Config, repo repositories.FeedRepository, feedParser *gofeed.Parser) FeedService {

@@ -24,6 +24,7 @@ import (
 type gRPCServer struct {
 	createFeed  kitGRPCTransport.Handler
 	getArticles kitGRPCTransport.Handler
+	getArticle  kitGRPCTransport.Handler
 	getFeeds    kitGRPCTransport.Handler
 }
 
@@ -52,6 +53,12 @@ func NewGRPCServer(endpoints endpoints.Endpoints, logger *logrus.Logger) pb.Feed
 			encodeGRPCGetArticlesResponse,
 			options...,
 		),
+		getArticle: kitGRPCTransport.NewServer(
+			endpoints.GetArticleEndpoint,
+			decodeGRPCGetArticleRequest,
+			encodeGRPCGetArticleResponse,
+			options...,
+		),
 	}
 }
 
@@ -70,22 +77,30 @@ func decodeGRPCGetArticlesRequest(_ context.Context, r interface{}) (interface{}
 	return endpoints.GetArticlesRequest{FeedID: req.FeedId}, nil
 }
 
-func convertToPBArticle(articles []models.Article) ([]*pb.Article, error) {
+func convertToPBArticle(article models.Article) (*pb.Article, error) {
+	articlePb := &pb.Article{
+		Title:             article.Title,
+		Description:       article.Description,
+		Link:              article.Link,
+		Guid:              article.GUID,
+		ThumbnailImageUrl: article.ThumbnailImageURL,
+		HtmlContent:       article.HTMLContent,
+	}
+	publishedPb, err := ptypes.TimestampProto(article.Published)
+	if err != nil {
+		return nil, err
+	}
+	articlePb.Published = publishedPb
+	return articlePb, nil
+}
+
+func convertToPBArticles(articles []models.Article) ([]*pb.Article, error) {
 	var articlesPb []*pb.Article
 	for _, article := range articles {
-		articlePb := &pb.Article{
-			Title:             article.Title,
-			Description:       article.Description,
-			Link:              article.Link,
-			Guid:              article.GUID,
-			ThumbnailImageUrl: article.ThumbnailImageURL,
-			HtmlContent:       article.HTMLContent,
-		}
-		publishedPb, err := ptypes.TimestampProto(article.Published)
+		articlePb, err := convertToPBArticle(article)
 		if err != nil {
 			return nil, err
 		}
-		articlePb.Published = publishedPb
 		articlesPb = append(articlesPb, articlePb)
 	}
 	return articlesPb, nil
@@ -93,11 +108,25 @@ func convertToPBArticle(articles []models.Article) ([]*pb.Article, error) {
 
 func encodeGRPCGetArticlesResponse(_ context.Context, r interface{}) (interface{}, error) {
 	resp := r.(endpoints.GetArticlesResponse)
-	articlesPb, err := convertToPBArticle(resp.Articles)
+	articlesPb, err := convertToPBArticles(resp.Articles)
 	if err != nil {
 		return nil, err
 	}
 	return &pb.GetArticlesReply{Articles: articlesPb, Err: err2str(resp.Err)}, nil
+}
+
+func decodeGRPCGetArticleRequest(_ context.Context, r interface{}) (interface{}, error) {
+	req := r.(*pb.GetArticleRequest)
+	return endpoints.GetArticleRequest{FeedID: req.FeedId, ArticleGUID: req.ArticleGuid}, nil
+}
+
+func encodeGRPCGetArticleResponse(_ context.Context, r interface{}) (interface{}, error) {
+	resp := r.(endpoints.GetArticleResponse)
+	pbArticle, err := convertToPBArticle(resp.Article)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.GetArticleReply{Article: pbArticle, Err: err2str(resp.Err)}, nil
 }
 
 func decodeGRPCGetFeedsRequest(_ context.Context, r interface{}) (interface{}, error) {
@@ -164,6 +193,14 @@ func (g *gRPCServer) GetArticles(ctx context.Context, req *pb.GetArticlesRequest
 	return reply.(*pb.GetArticlesReply), nil
 }
 
+func (g *gRPCServer) GetArticle(ctx context.Context, req *pb.GetArticleRequest) (*pb.GetArticleReply, error) {
+	_, reply, err := g.getArticle.ServeGRPC(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return reply.(*pb.GetArticleReply), nil
+}
+
 // Helper functions are required to translate Go error types to
 // and from strings, which is the type we use in our IDLs to represent errors.
 // There is special casing to treat empty strings as nil errors.
@@ -202,6 +239,24 @@ func NewGRPCClient(conn *grpc.ClientConn, logger *logrus.Logger) endpoints.Endpo
 			Name:    "getArticles",
 			Timeout: 30 * time.Second,
 		}))(getArticlesEndpoint)
+	}
+
+	var getArticleEndpoint endpoint.Endpoint
+	{
+		getArticleEndpoint = kitGRPCTransport.NewClient(
+			conn,
+			"pb.Feeder",
+			"GetArticle",
+			encodeGRPCGetArticleRequest,
+			decodeGRPCGetArticleResponse,
+			pb.GetArticleReply{},
+			options...,
+		).Endpoint()
+		getArticleEndpoint = limiter(getArticleEndpoint)
+		getArticleEndpoint = circuitbreaker.Gobreaker(gobreaker.NewCircuitBreaker(gobreaker.Settings{
+			Name:    "getArticle",
+			Timeout: 30 * time.Second,
+		}))(getArticleEndpoint)
 	}
 
 	var getFeedsEndpoint endpoint.Endpoint
@@ -244,6 +299,7 @@ func NewGRPCClient(conn *grpc.ClientConn, logger *logrus.Logger) endpoints.Endpo
 		CreateFeedEndpoint:  createFeedEndpoint,
 		GetFeedsEndpoint:    getFeedsEndpoint,
 		GetArticlesEndpoint: getArticlesEndpoint,
+		GetArticleEndpoint:  getArticleEndpoint,
 	}
 }
 
@@ -252,24 +308,56 @@ func encodeGRPCGetArticlesRequest(_ context.Context, request interface{}) (inter
 	return &pb.GetArticlesRequest{FeedId: req.FeedID}, nil
 }
 
-func decodeGRPCGetArticlesResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
-	reply := grpcReply.(*pb.GetArticlesReply)
+func convertToModelArticle(articlePb *pb.Article) (models.Article, error) {
+	article := models.Article{
+		Title:             articlePb.Title,
+		Description:       articlePb.Description,
+		Link:              articlePb.Link,
+		GUID:              articlePb.Guid,
+		ThumbnailImageURL: articlePb.ThumbnailImageUrl,
+		HTMLContent:       articlePb.HtmlContent,
+	}
+	published, err := ptypes.Timestamp(articlePb.Published)
+	if err != nil {
+		return models.Article{}, err
+	}
+	article.Published = published
+	return article, nil
+}
+
+func convertToModelArticles(pbArticles []*pb.Article) ([]models.Article, error) {
 	var articles []models.Article
-	for _, articlePb := range reply.Articles {
-		article := models.Article{
-			Title:             articlePb.Title,
-			Description:       articlePb.Description,
-			Link:              articlePb.Link,
-			GUID:              articlePb.Guid,
-			ThumbnailImageURL: articlePb.ThumbnailImageUrl,
-		}
-		published, err := ptypes.Timestamp(articlePb.Published)
+	for _, articlePb := range pbArticles {
+		article, err := convertToModelArticle(articlePb)
 		if err != nil {
 			return nil, err
 		}
-		article.Published = published
+		articles = append(articles, article)
+	}
+	return articles, nil
+}
+
+func decodeGRPCGetArticlesResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
+	reply := grpcReply.(*pb.GetArticlesReply)
+	articles, err := convertToModelArticles(reply.Articles)
+	if err != nil {
+		return nil, err
 	}
 	return endpoints.GetArticlesResponse{Articles: articles, Err: str2err(reply.Err)}, nil
+}
+
+func encodeGRPCGetArticleRequest(_ context.Context, request interface{}) (interface{}, error) {
+	req := request.(endpoints.GetArticleRequest)
+	return &pb.GetArticleRequest{FeedId: req.FeedID, ArticleGuid: req.ArticleGUID}, nil
+}
+
+func decodeGRPCGetArticleResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
+	reply := grpcReply.(*pb.GetArticleReply)
+	article, err := convertToModelArticle(reply.Article)
+	if err != nil {
+		return nil, err
+	}
+	return endpoints.GetArticleResponse{Article: article, Err: str2err(reply.Err)}, nil
 }
 
 func encodeGRPCGetFeedsRequest(_ context.Context, request interface{}) (interface{}, error) {
@@ -277,9 +365,9 @@ func encodeGRPCGetFeedsRequest(_ context.Context, request interface{}) (interfac
 	return &pb.GetFeedsRequest{Category: req.Category, Provider: req.Provider}, nil
 }
 
-func convertFromPBFeed(feedPb []*pb.Feed) ([]models.Feed, error) {
+func convertToModelFeeds(pbFeeds []*pb.Feed) ([]models.Feed, error) {
 	var feeds []models.Feed
-	for _, feedPb := range feedPb {
+	for _, feedPb := range pbFeeds {
 		feed := models.Feed{
 			ID:       feedPb.FeedId,
 			Category: feedPb.Category,
@@ -297,13 +385,14 @@ func convertFromPBFeed(feedPb []*pb.Feed) ([]models.Feed, error) {
 			return nil, err
 		}
 		feed.Updated = updated
+		feeds = append(feeds, feed)
 	}
 	return feeds, nil
 }
 
 func decodeGRPCGetFeedsResponse(_ context.Context, grpcReply interface{}) (interface{}, error) {
 	reply := grpcReply.(*pb.GetFeedsReply)
-	feeds, err := convertFromPBFeed(reply.Feeds)
+	feeds, err := convertToModelFeeds(reply.Feeds)
 	if err != nil {
 		return nil, err
 	}

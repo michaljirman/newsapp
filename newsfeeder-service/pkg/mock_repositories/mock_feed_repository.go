@@ -50,10 +50,10 @@ func (mr *MockFeedRepositoryMockRecorder) CreateFeed(arg0, arg1 interface{}) *go
 }
 
 // GetFeedByID mocks base method
-func (m *MockFeedRepository) GetFeedByID(arg0 context.Context, arg1 uint64) (*models.Feed, error) {
+func (m *MockFeedRepository) GetFeedByID(arg0 context.Context, arg1 uint64) (models.Feed, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFeedByID", arg0, arg1)
-	ret0, _ := ret[0].(*models.Feed)
+	ret0, _ := ret[0].(models.Feed)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

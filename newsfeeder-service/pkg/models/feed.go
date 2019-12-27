@@ -8,7 +8,7 @@ import (
 type Feed struct {
 	ID       uint64    `json:"feed_id" db:"feed_id"`
 	Created  time.Time `json:"created_at" db:"created_at"`
-	Updated  time.Time `json:"updated_at" db:"updated_at"`
+	Updated  time.Time `json:"modified_at" db:"modified_at"`
 	Category string    `json:"category" db:"category"`
 	Provider string    `json:"provider" db:"provider"`
 	URL      string    `json:"url" db:"url"`
@@ -21,7 +21,7 @@ type Article struct {
 	Published         time.Time `json:"published"`
 	GUID              string    `json:"guid"`
 	ThumbnailImageURL string    `json:"thumbnail_image_url"`
-	HTMLContent       string    `json:"html_content"`
+	HTMLContent       string    `json:"html_content,omitempty"`
 }
 
 func (a Article) String() string {

@@ -16,7 +16,7 @@ import (
 type FeedRepository interface {
 	CreateFeed(ctx context.Context, feed models.Feed) (uint64, error)
 	GetFeeds(ctx context.Context, category, provider string) ([]models.Feed, error)
-	GetFeedByID(ctx context.Context, feedID uint64) (*models.Feed, error)
+	GetFeedByID(ctx context.Context, feedID uint64) (models.Feed, error)
 }
 
 // feedRepository implements FeedRepository interface to work on the Feed model
@@ -61,12 +61,10 @@ func (repo *feedRepository) GetFeeds(ctx context.Context, category, provider str
 	}
 	if provider != "" {
 		if category != "" {
-			query += " AND "
+			query += " AND provider like $2"
 		} else {
-			query += " WHERE "
+			query += " WHERE provider like $1"
 		}
-		query += "category like $2"
-
 		args = append(args, provider)
 	}
 	err := repo.db.Select(&feeds, repo.db.Rebind(query), args...)
@@ -77,11 +75,11 @@ func (repo *feedRepository) GetFeeds(ctx context.Context, category, provider str
 }
 
 // GetFeedByID retrieves a single feed by
-func (repo *feedRepository) GetFeedByID(ctx context.Context, feedID uint64) (*models.Feed, error) {
-	var feed *models.Feed
-	err := repo.db.Get(feed, "SELECT * FROM feed where feed_id = $1", feedID)
+func (repo *feedRepository) GetFeedByID(ctx context.Context, feedID uint64) (models.Feed, error) {
+	feed := models.Feed{}
+	err := repo.db.Get(&feed, "SELECT * FROM feed where feed_id = $1", feedID)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to get feed by ID")
+		return models.Feed{}, errors.Wrap(err, "failed to get feed by ID")
 	}
 	return feed, nil
 }

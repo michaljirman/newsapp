@@ -35,13 +35,23 @@ func NewHTTPHandler(endpoints endpoints.Endpoints, logger *logrus.Logger) http.H
 		options...,
 	))
 
-	//TODO GET /feeds
+	r.Methods("GET").Path("/feeds").Handler(kitHttpTransport.NewServer(
+		endpoints.GetFeedsEndpoint,
+		decodeHTTPGetFeedsRequest,
+		encodeHTTPGenericResponse,
+		options...,
+	))
 
-	// r.Methods("GET").Path("/news/{feed_id}").Queries("category", "{category}").Handler(getNewsArticlesHandler)
-	// r.Methods("GET").Path("/news/{feed_id}").Queries("provider", "{provider}").Handler(getNewsArticlesHandler)
 	r.Methods("GET").Path("/feeds/{feed_id}/articles").Handler(kitHttpTransport.NewServer(
 		endpoints.GetArticlesEndpoint,
 		decodeHTTPGetArticlesRequest,
+		encodeHTTPGenericResponse,
+		options...,
+	))
+
+	r.Methods("POST").Path("/articles/searches").Handler(kitHttpTransport.NewServer(
+		endpoints.GetArticleEndpoint,
+		decodeHTTPGetArticleRequest,
 		encodeHTTPGenericResponse,
 		options...,
 	))
@@ -59,6 +69,17 @@ func decodeHTTPPostFeedRequest(_ context.Context, r *http.Request) (interface{},
 	return req, err
 }
 
+func decodeHTTPGetFeedsRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	req := endpoints.GetFeedsRequest{}
+	if categoryValues, ok := r.URL.Query()["category"]; ok {
+		req.Category = categoryValues[0]
+	}
+	if providerValues, ok := r.URL.Query()["provider"]; ok {
+		req.Provider = providerValues[0]
+	}
+	return req, nil
+}
+
 func decodeHTTPGetArticlesRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	vars := mux.Vars(r)
 	feedIDParam, ok := vars["feed_id"]
@@ -70,10 +91,15 @@ func decodeHTTPGetArticlesRequest(_ context.Context, r *http.Request) (interface
 		return nil, ErrBadRouting
 	}
 	req := endpoints.GetArticlesRequest{FeedID: feedID}
+	return req, nil
+}
 
-	// queries := r.URL.Query()
-	// req.Category = queries.Get("category")
-	// req.Provider = queries.Get("provider")
+func decodeHTTPGetArticleRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	req := endpoints.GetArticleRequest{}
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		return nil, err
+	}
 	return req, nil
 }
 
@@ -85,7 +111,9 @@ func encodeHTTPGenericResponse(ctx context.Context, w http.ResponseWriter, respo
 		return nil
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	return json.NewEncoder(w).Encode(response)
+	encoder := json.NewEncoder(w)
+	encoder.SetEscapeHTML(false)
+	return encoder.Encode(response)
 }
 
 func encodeHTTPPostFeedResponse(ctx context.Context, w http.ResponseWriter, response interface{}) error {

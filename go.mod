@@ -25,8 +25,9 @@ require (
 	github.com/sony/gobreaker v0.4.1
 	github.com/streadway/handy v0.0.0-20190108123426-d5acb3125c2a // indirect
 	github.com/stretchr/testify v1.3.0
+	github.com/victorspringer/http-cache v0.0.0-20190721184638-fe78e97af707
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553
+	golang.org/x/sys v0.0.0-20190610200419-93c9922d18ae // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0
-	google.golang.org/appengine v1.5.0
 	google.golang.org/grpc v1.26.0
 )

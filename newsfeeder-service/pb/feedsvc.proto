@@ -8,6 +8,7 @@ service Feeder {
     rpc CreateFeed (CreateFeedRequest) returns (CreateFeedReply) {}
     rpc GetFeeds (GetFeedsRequest) returns (GetFeedsReply) {}
     rpc GetArticles (GetArticlesRequest) returns (GetArticlesReply) {}
+    rpc GetArticle (GetArticleRequest) returns (GetArticleReply) {}
 }
 
 message CreateFeedRequest {
@@ -39,6 +40,16 @@ message Article {
 
 message GetArticlesReply {
     repeated Article Articles = 1; 
+    string err = 2;
+}
+
+message GetArticleRequest {
+    uint64 feed_id = 1;
+    string article_guid = 2;
+}
+
+message GetArticleReply {
+    Article Article = 1; 
     string err = 2;
 }
 

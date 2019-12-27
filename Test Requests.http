@@ -1,21 +1,39 @@
-### Create a new news feed
-POST http://localhost:8081/newsfeeder/feeds HTTP/1.1
+@hostname = localhost
+# localhost
+# @port = 8081
+# docker
+@port = 8801
+@host = {{hostname}}:{{port}}
+
+### Create a new feed
+POST http://{{host}}/newsfeeder/feeds HTTP/1.1
 content-type: application/json
 
 {
-    "category": "UK",
+    "category": "politics",
     "provider": "BBC",
-    "url": "http://feeds.bbci.co.uk/news/uk/rss.xml"
+    "url": "http://feeds.bbci.co.uk/news/politics/rss.xml"
 }
 
+### Get feeds
+GET http://{{host}}/newsfeeder/feeds HTTP/1.1
+
+### Filter feeds by category
+GET http://{{host}}/newsfeeder/feeds?category=UK HTTP/1.1
+
+### Filter feeds by provider
+GET http://{{host}}/newsfeeder/feeds?provider=Reuters HTTP/1.1
+
+### Filter feeds by provider and category
+GET http://{{host}}/newsfeeder/feeds?category=UK&provider=Reuters HTTP/1.1
+
 ### Get articles by feed ID
-GET /newsfeeder/feeds/1/articles HTTP/1.1
-Host: localhost:8081
+GET http://{{host}}/newsfeeder/feeds/1/articles HTTP/1.1
 
-### Get articles by feed ID and category
-GET /news/1?category=UK%20News HTTP/1.1
-Host: localhost:8081
+### Searches articles by feed ID and article GUID
+POST http://{{host}}/newsfeeder/articles/searches HTTP/1.1
 
-### Get articles by feed ID and provider
-GET /news/1?provider=test HTTP/1.1
-Host: localhost:8081
+{
+    "feed_id": 1,
+    "article_guid": "https://www.bbc.co.uk/news/uk-england-50823553"
+}

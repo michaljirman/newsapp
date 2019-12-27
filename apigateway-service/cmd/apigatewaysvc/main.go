@@ -7,12 +7,15 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/caarlos0/env"
 	"github.com/gorilla/mux"
 	"github.com/oklog/oklog/pkg/group"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	cache "github.com/victorspringer/http-cache"
+	"github.com/victorspringer/http-cache/adapter/memory"
 	"google.golang.org/grpc"
 
 	newsfeederTransports "github.com/michaljirman/newsapp/newsfeeder-service/pkg/transports"
@@ -37,6 +40,7 @@ func Get() (*Config, error) {
 }
 
 func main() {
+	// sets up logger
 	logger := logrus.New()
 	lvl, ok := os.LookupEnv("LOG_LEVEL")
 	if !ok {
@@ -57,8 +61,8 @@ func main() {
 	// ctx := context.Background()
 	r := mux.NewRouter()
 
+	// sets up grpc connection
 	logger.Debugf("grpc dial .... %s", cfg.NewsFeederSvc)
-
 	conn, err := grpc.Dial(cfg.NewsFeederSvc, grpc.WithInsecure())
 	if err != nil {
 		logger.Errorf("%+v", errors.Wrap(err, "failed to connect"))
@@ -66,9 +70,32 @@ func main() {
 	}
 	defer conn.Close()
 
+	// creates grpc endpoints
 	endpoints := newsfeederTransports.NewGRPCClient(conn, logger)
 
-	r.PathPrefix("/newsfeeder").Handler(http.StripPrefix("/newsfeeder", newsfeederTransports.NewHTTPHandler(endpoints, logger)))
+	// Sets up cache
+	memcached, err := memory.NewAdapter(
+		memory.AdapterWithAlgorithm(memory.LRU),
+		memory.AdapterWithCapacity(10000000),
+	)
+	if err != nil {
+		logger.Errorf("%+v", errors.Wrap(err, "failed to connect"))
+		os.Exit(1)
+	}
+
+	cacheClient, err := cache.NewClient(
+		cache.ClientWithAdapter(memcached),
+		cache.ClientWithTTL(10*time.Minute),
+		cache.ClientWithRefreshKey("opn"),
+	)
+	if err != nil {
+		logger.Errorf("%+v", errors.Wrap(err, "failed to connect"))
+		os.Exit(1)
+	}
+
+	// configures routes, uses http transport package to sets up routes
+	handler := http.StripPrefix("/newsfeeder", newsfeederTransports.NewHTTPHandler(endpoints, logger))
+	r.PathPrefix("/newsfeeder").Handler(cacheClient.Middleware(handler))
 
 	var g group.Group
 	{
