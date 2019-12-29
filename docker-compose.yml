@@ -40,7 +40,7 @@ services:
       - GRPC_ADDRESS=:8082
       - URLBOX_API_URL=https://api.urlbox.io/v1/
       - URLBOX_API_TOKEN=TFb7yVm5aCzXBXhD
-      - URLBOX_API_SECRET=b12ef2ba05a64af995fc17e2a4efb471
+      - URLBOX_API_SECRET=
       - LOG_LEVEL=debug
       - DB_HOST=newsfeedersvc-postgres
       - DB_PORT=5432
