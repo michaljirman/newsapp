@@ -13,7 +13,7 @@ end
 alt get all feeds
 mobileapp->apigatewaysvc: GET: /newsfeeder/feeds [Rest API]
 apigatewaysvc-[#0000FF]>newsfeedersvc: GetFeedsRequest [GRPC]
-newsfeedersvc->db: retrieve feeds from the DB
+newsfeedersvc<->db: retrieve feeds from the DB
 newsfeedersvc-[#0000FF]>apigatewaysvc: GetFeedsReply [gRPC]
 apigatewaysvc-->mobileapp: list of feeds [Rest API]
 end
@@ -21,7 +21,7 @@ end
 alt get feeds by category or provider
 mobileapp->apigatewaysvc: GET: \n/newsfeeder/feeds?category=UK \n/newsfeeder/feeds?provider=Reuters \n[Rest API]
 apigatewaysvc-[#0000FF]>newsfeedersvc: GetFeedsRequest [GRPC]
-newsfeedersvc->db: retrieve feeds from the DB
+newsfeedersvc<->db: retrieve feeds from the DB
 newsfeedersvc-[#0000FF]>apigatewaysvc: GetFeedsReply [gRPC]
 apigatewaysvc-->mobileapp: list of feeds [Rest API]
 end
@@ -29,7 +29,7 @@ end
 alt create a new feed
 mobileapp->apigatewaysvc: POST: /newsfeeder/feeds [Rest API]
 apigatewaysvc-[#0000FF]>newsfeedersvc: CreateFeedRequest [GRPC]
-newsfeedersvc->db: retrieve feeds from the DB
+newsfeedersvc<->db: store a new feed to the DB
 newsfeedersvc-[#0000FF]>apigatewaysvc: CreateFeedReply [gRPC]
 apigatewaysvc-->mobileapp: feed ID and resource location [Rest API]
 end
