@@ -1,0 +1,46 @@
+@startuml
+scale 0.7
+participant "mobile app" as mobileapp
+participant "apigatewaysvc" as apigatewaysvc
+participant "newsfeedersvc" as newsfeedersvc
+database "newsfeedersvc-postgres" as db
+
+alt Connect to the newsfeedersvc
+apigatewaysvc--[#green]>newsfeedersvc: connect to service via gRPC
+newsfeedersvc--[#green]>db: connect to DB
+end
+
+alt get all feeds
+mobileapp->apigatewaysvc: GET: /newsfeeder/feeds [Rest API]
+apigatewaysvc-[#0000FF]>newsfeedersvc: GetFeedsRequest [GRPC]
+newsfeedersvc->db: retrieve feeds from the DB
+newsfeedersvc-[#0000FF]>apigatewaysvc: GetFeedsReply [gRPC]
+apigatewaysvc-->mobileapp: list of feeds [Rest API]
+end
+
+alt get feeds by category or provider
+mobileapp->apigatewaysvc: GET: \n/newsfeeder/feeds?category=UK \n/newsfeeder/feeds?provider=Reuters \n[Rest API]
+apigatewaysvc-[#0000FF]>newsfeedersvc: GetFeedsRequest [GRPC]
+newsfeedersvc->db: retrieve feeds from the DB
+newsfeedersvc-[#0000FF]>apigatewaysvc: GetFeedsReply [gRPC]
+apigatewaysvc-->mobileapp: list of feeds [Rest API]
+end
+
+alt create a new feed
+mobileapp->apigatewaysvc: POST: /newsfeeder/feeds [Rest API]
+apigatewaysvc-[#0000FF]>newsfeedersvc: CreateFeedRequest [GRPC]
+newsfeedersvc->db: retrieve feeds from the DB
+newsfeedersvc-[#0000FF]>apigatewaysvc: CreateFeedReply [gRPC]
+apigatewaysvc-->mobileapp: feed ID and resource location [Rest API]
+end
+
+alt get articles by feed ID
+mobileapp->apigatewaysvc: GET: /newsfeeder/feeds/1/articles [Rest API]
+apigatewaysvc-[#0000FF]>newsfeedersvc: GetArticlesRequest [GRPC]
+newsfeedersvc->newsfeedersvc: processes the feed URL (gofeed)
+newsfeedersvc->newsfeedersvc: prepare web site thumbnail URL (api.urlbox.io)
+newsfeedersvc-[#0000FF]>apigatewaysvc: GetArticlesReply [gRPC]
+apigatewaysvc-->mobileapp: list of articles [Rest API]
+end
+
+@enduml

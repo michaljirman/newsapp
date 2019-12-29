@@ -8,6 +8,7 @@ This repository contains a demo News App (API) project consiting of two microser
 
 ## `Design`
 
+![Drag Racing](apigateway-service/docs/design.png)
 
 ### Some external libraries 
 
